@@ -1,11 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class ThreadAndLoadApp extends JFrame {
+    private JPanel mainPanel;
     private JPanel leftPanel;
     private JPanel rightPanel;
     private JButton btnLoad;
@@ -13,14 +16,14 @@ public class ThreadAndLoadApp extends JFrame {
 
     public ThreadAndLoadApp(String title){
         super(title);
-        setContentPane(leftPanel);
+        setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(500,500));
         pack();
         btnLoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                System.out.println(event.getSource());
+
             }
         });
         btnLoad.addMouseListener(new MouseAdapter() {
@@ -28,6 +31,20 @@ public class ThreadAndLoadApp extends JFrame {
             public void mouseClicked(MouseEvent event) {
                 super.mouseClicked(event);
                 /* Load the data.txt file into the JTextArea here */
+                /* FileReader read =new FileReader("data.txt"); */
+                try {
+                    File file = new File("data.txt");
+                    Scanner scanner = new Scanner(file);
+                    String text = "";
+                    while (scanner.hasNextLine()) {
+                        text += scanner.nextLine();
+                    }
+                    scanner.close();
+                    txtLoad.setText(text);
+                }
+                catch (FileNotFoundException i) {
+                    txtLoad.setText("Error loading file.");
+                }
             }
         });
     }
